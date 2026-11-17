@@ -1,0 +1,21 @@
+@startsalt tela02-checkout
+title TELA02 — Checkout (Pagamento)
+{+
+  <b>Finalizar pedido
+  ==
+  {#
+    Item | Qtd | Subtotal
+    Red Velvet | 3 | R$ 38,70
+    Pistache | 2 | R$ 31,80
+  }
+  { Subtotal | R$ 70,50 }
+  { Frete | R$ 10,00 }
+  { <b>Total | <b>R$ 80,50 }
+  --
+  Endereço de entrega | "Rua das Flores, 123 - São Paulo/SP "
+  Forma de pagamento  | (X) PIX
+  .
+  <color:red>MSG05: Estoque insuficiente para Pistache: disponível 1, solicitado 2.
+  [Voltar ao carrinho] | [<b>Pagar com PIX]
+}
+@endsalt

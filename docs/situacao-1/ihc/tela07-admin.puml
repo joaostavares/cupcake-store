@@ -1,0 +1,21 @@
+@startsalt tela07-admin
+title TELA07 — Administração
+{+
+  {/ <b>Catálogo e estoque | Pedidos }
+  ==
+  {#
+    Sabor | Preço | Estoque | Ativo | .
+    Red Velvet | R$ 12,90 | "30 " | [X] | [Editar] [Salvar estoque]
+    Coco Queimado | R$ 11,90 | "0  " | [X] | [Editar] [Salvar estoque]
+    Morango (antigo) | R$ 9,90 | "5  " | [ ] | [Editar] [Salvar estoque]
+  }
+  --
+  <b>Novo / editar cupcake
+  Sabor | "                "
+  Descrição | "                "
+  Preço | "                "
+  Estoque | "                "
+  URL imagem | "                "
+  [<b>Salvar]
+}
+@endsalt

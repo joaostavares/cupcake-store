@@ -1,0 +1,18 @@
+@startsalt tela05-carrinho
+title TELA05 — Carrinho
+{+
+  {/ <b>Cupcakes Gourmet | Vitrine | Meus pedidos | Entrar | Carrinho (5) }
+  ==
+  <b>Seu carrinho
+  {#
+    Sabor | Preço | Qtd | Subtotal | .
+    Red Velvet | R$ 12,90 | { [-] | "3" | [+] } | R$ 38,70 | [Remover]
+    Pistache | R$ 15,90 | { [-] | "2" | [+] } | R$ 31,80 | [Remover]
+  }
+  .
+  { Subtotal: | R$ 70,50 }
+  { Frete (grátis acima de R$ 100): | R$ 10,00 }
+  { <b>Total: | <b>R$ 80,50 }
+  [Continuar comprando] | [<b>Finalizar compra]
+}
+@endsalt

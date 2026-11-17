@@ -1,0 +1,83 @@
+@startuml classes-dominio
+!pragma layout smetana
+title Diagrama de Classes — Domínio (entidades JPA, revisado)
+skinparam classAttributeIconSize 0
+hide empty methods
+
+enum Papel {
+  CLIENTE
+  ADMIN
+}
+enum StatusPedido {
+  AGUARDANDO_PAGAMENTO
+  PAGO
+  EM_PREPARO
+  ENVIADO
+  ENTREGUE
+  CANCELADO
+  --
+  +podeMudarPara(novo: StatusPedido): boolean
+}
+enum MetodoPagamento {
+  PIX
+}
+enum StatusPagamento {
+  PENDENTE
+  CONFIRMADO
+  CANCELADO
+}
+
+class Usuario {
+  -id: Long
+  -nome: String
+  -email: String {único}
+  -senhaHash: String
+  -telefone: String
+  -endereco: String
+  -papel: Papel
+  -criadoEm: Instant
+}
+class Cupcake {
+  -id: Long
+  -sabor: String {único}
+  -descricao: String
+  -preco: BigDecimal
+  -estoque: Integer
+  -imagemUrl: String
+  -ativo: boolean
+  -criadoEm: Instant
+}
+class Pedido {
+  -id: Long
+  -dataHora: Instant
+  -status: StatusPedido
+  -subtotal: BigDecimal
+  -frete: BigDecimal
+  -total: BigDecimal
+  -enderecoEntrega: String
+}
+class ItemPedido {
+  -id: Long
+  -quantidade: Integer
+  -precoUnitario: BigDecimal
+  -subtotal: BigDecimal
+}
+class Pagamento {
+  -id: Long
+  -metodo: MetodoPagamento
+  -status: StatusPagamento
+  -valor: BigDecimal
+  -codigoPix: String
+  -criadoEm: Instant
+  -confirmadoEm: Instant
+}
+
+Usuario "1" -- "0..*" Pedido : realiza >
+Pedido "1" *-- "1..*" ItemPedido : possui >
+ItemPedido "0..*" --> "1" Cupcake : contém >
+Pedido "1" *-- "1" Pagamento : é pago por >
+Usuario ..> Papel
+Pedido ..> StatusPedido
+Pagamento ..> StatusPagamento
+Pagamento ..> MetodoPagamento
+@enduml

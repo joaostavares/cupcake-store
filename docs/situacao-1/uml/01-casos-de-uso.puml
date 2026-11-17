@@ -1,0 +1,39 @@
+@startuml casos-de-uso
+!pragma layout smetana
+title Casos de Uso — Cupcakes Gourmet (revisado no PIT II)
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Visitante" as Visitante
+actor "Cliente" as Cliente
+actor "Administrador" as Admin
+actor "Sistema de Pagamento\n(PIX simulado)" as PSP <<sistema>>
+
+Visitante <|-- Cliente
+
+rectangle "Loja Web Cupcakes Gourmet" {
+  usecase "CU02 Visualizar Catálogo" as UC_CAT
+  usecase "CU03 Gerenciar Carrinho" as UC_CAR
+  usecase "CU04 Realizar Cadastro/Login" as UC_LOGIN
+  usecase "CU01 Realizar Pedido\n(Finalizar Compra)" as UC_PED
+  usecase "CU05 Processar Pagamento PIX" as UC_PAG
+  usecase "CU06 Acompanhar Pedido" as UC_ACOMP
+  usecase "CU07 Confirmar Pagamento" as UC_CONF
+  usecase "CU08 Gerenciar Catálogo e Estoque" as UC_ADM
+  usecase "CU09 Atualizar Status do Pedido" as UC_STATUS
+  usecase "CU10 Cancelar Pedido" as UC_CANC
+}
+
+Visitante --> UC_CAT
+Visitante --> UC_CAR
+Visitante --> UC_LOGIN
+Cliente --> UC_PED
+Cliente --> UC_ACOMP
+Cliente --> UC_CANC
+UC_PED ..> UC_PAG : <<include>>
+UC_PAG --> PSP
+PSP --> UC_CONF
+Admin --> UC_ADM
+Admin --> UC_STATUS
+Admin --> UC_CANC
+@enduml

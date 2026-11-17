@@ -1,0 +1,13 @@
+@startuml estados-pedido
+title Máquina de Estados — Pedido (RN07)
+[*] --> AGUARDANDO_PAGAMENTO : pedido criado
+AGUARDANDO_PAGAMENTO --> PAGO : pagamento PIX confirmado
+AGUARDANDO_PAGAMENTO --> CANCELADO : cliente ou admin cancela
+PAGO --> EM_PREPARO : admin
+PAGO --> CANCELADO : admin (estorno manual)
+EM_PREPARO --> ENVIADO : admin
+ENVIADO --> ENTREGUE : admin
+ENTREGUE --> [*]
+CANCELADO --> [*]
+note right of CANCELADO : estoque dos itens é devolvido (RN08)
+@enduml

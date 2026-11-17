@@ -1,0 +1,75 @@
+@startuml classes-camadas
+!pragma layout smetana
+title Diagrama de Classes — Arquitetura MVC em camadas (regras nos services)
+skinparam classAttributeIconSize 0
+hide empty fields
+
+package "controller (C do MVC — API REST)" {
+  class CupcakeController
+  class AuthController
+  class PedidoController
+  class AdminController
+  class GlobalExceptionHandler <<ControllerAdvice>>
+}
+package "service (regras de negócio)" {
+  class CupcakeService {
+    +listarVitrine(): List<CupcakeResponse>
+    +criar(req): CupcakeResponse
+    +atualizar(id, req): CupcakeResponse
+    +ajustarEstoque(id, novoEstoque): CupcakeResponse
+  }
+  class UsuarioService {
+    +cadastrar(req): UsuarioResponse
+  }
+  class PedidoService {
+    +cotar(itens): CotacaoResponse
+    +criarPedido(usuario, req): PedidoResponse
+    +confirmarPagamento(pedidoId, usuario): PedidoResponse
+    +cancelar(pedidoId, usuario): PedidoResponse
+    +atualizarStatus(pedidoId, status): PedidoResponse
+  }
+  class CalculadoraFrete <<RN02>> {
+    +calcularFrete(subtotal): BigDecimal
+  }
+  class PixService {
+    +gerarCodigo(pedidoId, valor): String
+    +gerarQrCodePng(codigo): byte[]
+  }
+}
+package "repository (Spring Data JPA)" {
+  interface UsuarioRepository
+  interface CupcakeRepository {
+    +findAllByIdForUpdate(ids): List<Cupcake>
+  }
+  interface PedidoRepository
+}
+package "model (M do MVC — entidades JPA)" {
+  class Usuario
+  class Cupcake
+  class Pedido
+  class ItemPedido
+  class Pagamento
+}
+package "view (V do MVC — front estático)" {
+  class "index.html / carrinho.html\ncheckout.html / pedido.html\nmeus-pedidos.html / admin.html" as Views
+}
+
+Views ..> CupcakeController : fetch JSON
+Views ..> PedidoController : fetch JSON
+Views ..> AuthController
+Views ..> AdminController
+CupcakeController --> CupcakeService
+AdminController --> CupcakeService
+AdminController --> PedidoService
+PedidoController --> PedidoService
+AuthController --> UsuarioService
+PedidoService --> CalculadoraFrete
+PedidoService --> PixService
+PedidoService --> CupcakeRepository
+PedidoService --> PedidoRepository
+CupcakeService --> CupcakeRepository
+UsuarioService --> UsuarioRepository
+CupcakeRepository ..> Cupcake
+PedidoRepository ..> Pedido
+UsuarioRepository ..> Usuario
+@enduml

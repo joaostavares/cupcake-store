@@ -1,0 +1,27 @@
+@startuml sequencia-confirmar-pagamento
+title Sequência — CU07 Confirmar Pagamento (simulação do PSP)
+autonumber
+actor "Cliente/Admin" as Ator
+participant "Navegador" as Web
+participant "PedidoController" as Ctrl
+participant "PedidoService" as Svc
+database "PostgreSQL" as BD
+
+Ator -> Web : "Simular pagamento PIX"
+Web -> Ctrl : POST /api/pedidos/{id}/pagamento/confirmar
+Ctrl -> Svc : confirmarPagamento(id, usuario)
+Svc -> BD : busca pedido + pagamento
+alt pedido não está AGUARDANDO_PAGAMENTO
+  Svc --> Ctrl : RegraNegocioException
+  Ctrl --> Web : 422 Unprocessable Entity
+else
+  Svc -> BD : pagamento.status = CONFIRMADO, confirmadoEm = agora
+  Svc -> BD : pedido.status = PAGO
+  Ctrl --> Web : 200 OK (pedido atualizado)
+  Web --> Ator : "Pagamento confirmado!"
+end
+note over Web, Ctrl
+Em produção este endpoint seria um webhook chamado pelo PSP
+(Mercado Pago, Efí, etc.) com assinatura verificada.
+end note
+@enduml

@@ -1,0 +1,39 @@
+@startuml sequencia-finalizar-pedido
+title Sequência — CU01 Finalizar Compra (revisado)
+autonumber
+actor Cliente
+participant "Navegador\n(Web responsiva HTML/CSS/JS)" as Web
+participant "PedidoController" as Ctrl
+participant "PedidoService" as Svc
+participant "CalculadoraFrete" as Frete
+participant "PixService" as Pix
+database "PostgreSQL" as BD
+
+Cliente -> Web : clica "Finalizar Compra"
+Web -> Ctrl : POST /api/pedidos\n{itens, enderecoEntrega} (sessão autenticada)
+Ctrl -> Ctrl : valida DTO (Bean Validation)
+Ctrl -> Svc : criarPedido(usuario, req)
+activate Svc
+note right of Svc : @Transactional
+Svc -> BD : SELECT ... FROM cupcake WHERE id IN (...) FOR UPDATE
+BD --> Svc : cupcakes bloqueados
+Svc -> Svc : verificarEstoque() — RN01
+alt estoque insuficiente ou cupcake inativo
+  Svc --> Ctrl : EstoqueInsuficienteException
+  Ctrl --> Web : 409 Conflict (ProblemDetail)
+  Web --> Cliente : mensagem MSG05 e volta ao carrinho
+else estoque OK
+  Svc -> Svc : congela precoUnitario nos itens
+  Svc -> Frete : calcularFrete(subtotal) — RN02
+  Frete --> Svc : frete
+  Svc -> BD : UPDATE cupcake SET estoque = estoque - qtd
+  Svc -> BD : INSERT pedido, item_pedido
+  Svc -> Pix : gerarCodigo(pedidoId, total)
+  Pix --> Svc : BR Code "copia e cola"
+  Svc -> BD : INSERT pagamento (PENDENTE)
+  Svc --> Ctrl : PedidoResponse
+  deactivate Svc
+  Ctrl --> Web : 201 Created + Location /api/pedidos/{id}
+  Web --> Cliente : TELA03 — QR Code PIX + resumo do pedido
+end
+@enduml

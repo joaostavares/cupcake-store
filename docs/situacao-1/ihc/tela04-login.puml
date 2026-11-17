@@ -1,0 +1,19 @@
+@startsalt tela04-login
+title TELA04 — Login / Cadastro
+{+
+  {/ <b>Entrar | Criar conta }
+  ==
+  <color:red>MSG01: E-mail ou senha inválidos.
+  E-mail  | "cliente@exemplo.com  "
+  Senha   | "******               "
+  [<b>Entrar]
+  --
+  <i>Criar conta:
+  Nome     | "                     "
+  E-mail   | "                     "
+  Senha    | "                     "
+  Telefone | "                     "
+  Endereço | "                     "
+  [<b>Cadastrar]
+}
+@endsalt

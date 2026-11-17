@@ -1,0 +1,12 @@
+@startsalt tela06-meus-pedidos
+title TELA06 — Meus Pedidos
+{+
+  <b>Meus pedidos
+  ==
+  {#
+    Pedido | Data | Total | Status | .
+    #42 | 17/11/2026 19:30 | R$ 80,50 | AGUARDANDO PAGAMENTO | [Ver]
+    #37 | 10/11/2026 14:02 | R$ 129,00 | ENTREGUE | [Ver]
+  }
+}
+@endsalt

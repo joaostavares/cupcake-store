@@ -1,0 +1,66 @@
+@startuml modelo-logico
+!pragma layout smetana
+title Modelo Lógico Normalizado (3FN) — PostgreSQL
+skinparam linetype ortho
+hide circle
+hide methods
+
+entity usuario {
+  * id : BIGINT <<PK>>
+  --
+  * nome : VARCHAR(100)
+  * email : VARCHAR(150) <<UK>>
+  * senha_hash : VARCHAR(100)
+  telefone : VARCHAR(20)
+  endereco : VARCHAR(255)
+  * papel : VARCHAR(20)
+  * criado_em : TIMESTAMPTZ
+}
+entity cupcake {
+  * id : BIGINT <<PK>>
+  --
+  * sabor : VARCHAR(80) <<UK>>
+  descricao : VARCHAR(500)
+  * preco : NUMERIC(10,2)
+  * estoque : INTEGER
+  imagem_url : VARCHAR(255)
+  * ativo : BOOLEAN
+  * criado_em : TIMESTAMPTZ
+}
+entity pedido {
+  * id : BIGINT <<PK>>
+  --
+  * usuario_id : BIGINT <<FK>>
+  * data_hora : TIMESTAMPTZ
+  * status : VARCHAR(30)
+  * subtotal : NUMERIC(10,2)
+  * frete : NUMERIC(10,2)
+  * total : NUMERIC(10,2)
+  * endereco_entrega : VARCHAR(255)
+}
+entity item_pedido {
+  * id : BIGINT <<PK>>
+  --
+  * pedido_id : BIGINT <<FK>>
+  * cupcake_id : BIGINT <<FK>>
+  * quantidade : INTEGER
+  * preco_unitario : NUMERIC(10,2)
+  * subtotal : NUMERIC(10,2)
+}
+entity pagamento {
+  * id : BIGINT <<PK>>
+  --
+  * pedido_id : BIGINT <<FK,UK>>
+  * metodo : VARCHAR(20)
+  * status : VARCHAR(20)
+  * valor : NUMERIC(10,2)
+  codigo_pix : VARCHAR(512)
+  * criado_em : TIMESTAMPTZ
+  confirmado_em : TIMESTAMPTZ
+}
+
+usuario ||--o{ pedido
+pedido ||--|{ item_pedido
+cupcake ||--o{ item_pedido
+pedido ||--|| pagamento
+@enduml

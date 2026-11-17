@@ -1,0 +1,34 @@
+@startuml atividades-realizar-pedido
+title Atividades — Realizar Pedido (do catálogo ao pagamento)
+start
+:Visitante abre a vitrine (TELA01, pública);
+repeat
+  :Escolhe cupcake e quantidade;
+  if (Quantidade <= estoque disponível? (RN01)) then (sim)
+    :Adiciona ao carrinho (localStorage);
+  else (não)
+    :Exibe MSG04 "Estoque insuficiente";
+  endif
+repeat while (Continuar comprando?) is (sim)
+->não;
+:Abre carrinho e vê subtotal, frete e total (RN02);
+:Clica "Finalizar Compra";
+if (Está logado?) then (não)
+  :Login ou cadastro (TELA04);
+endif
+:Confirma endereço de entrega (TELA02);
+:Sistema revalida e baixa o estoque na transação (RN01/RN05);
+if (Estoque ainda disponível?) then (sim)
+  :Registra pedido AGUARDANDO_PAGAMENTO;
+  :Gera código PIX (TELA03);
+  if (Pagamento confirmado?) then (sim)
+    :Pedido PAGO;
+    :Admin prepara, envia e entrega (RN07);
+  else (cancelado)
+    :Pedido CANCELADO e estoque devolvido (RN08);
+  endif
+else (não)
+  :Exibe MSG05 e volta ao carrinho;
+endif
+stop
+@enduml

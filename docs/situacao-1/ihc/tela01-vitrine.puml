@@ -1,0 +1,17 @@
+@startsalt tela01-vitrine
+title TELA01 — Vitrine (pública)
+{+
+  {/ <b>Cupcakes Gourmet | Vitrine | Meus pedidos | Entrar | Carrinho (2) }
+  ==
+  <b>Nossos cupcakes
+  {#
+    [img Red Velvet]      | [img Chocolate Belga] | [img Coco Queimado]
+    <b>Red Velvet         | <b>Chocolate Belga    | <b>Coco Queimado
+    Massa aveludada...    | Ganache 54%...        | Coco e leite cond...
+    R$ 12,90              | R$ 13,90              | R$ 11,90
+    Estoque: 30           | Estoque: 25           | <color:red>ESGOTADO
+    { [-] | "1 " | [+] }  | { [-] | "1 " | [+] }  | .
+    [Adicionar ao carrinho] | [Adicionar ao carrinho] | [Indisponível]
+  }
+}
+@endsalt

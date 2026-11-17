@@ -1,0 +1,24 @@
+@startsalt tela03-pix-resumo
+title TELA03 — Pagamento PIX + Resumo do Pedido
+{+
+  <b>Pedido #42 — AGUARDANDO PAGAMENTO
+  ==
+  {
+    [ QR CODE PIX ]
+    .
+    PIX copia e cola:
+    "00020126...6304ABCD     " | [Copiar código]
+    <i>Ambiente de demonstração — pagamento simulado
+    [<b>Simular pagamento PIX] | [Cancelar pedido]
+  }
+  --
+  <b>Resumo
+  {#
+    Item | Qtd | Preço unit. | Subtotal
+    Red Velvet | 3 | R$ 12,90 | R$ 38,70
+    Pistache | 2 | R$ 15,90 | R$ 31,80
+  }
+  { Subtotal R$ 70,50 | Frete R$ 10,00 | <b>Total R$ 80,50 }
+  Entrega: Rua das Flores, 123 - São Paulo/SP
+}
+@endsalt

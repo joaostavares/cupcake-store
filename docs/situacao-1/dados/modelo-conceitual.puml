@@ -1,0 +1,28 @@
+@startuml modelo-conceitual
+!pragma layout smetana
+title Modelo Conceitual (Entidade-Relacionamento)
+skinparam linetype ortho
+hide circle
+hide methods
+
+entity USUARIO {
+  nome, email, senha, telefone, endereço, papel
+}
+entity CUPCAKE {
+  sabor, descrição, preço, estoque, imagem, ativo
+}
+entity PEDIDO {
+  data/hora, status, subtotal, frete, total, endereço de entrega
+}
+entity ITEM_PEDIDO {
+  quantidade, preço unitário, subtotal
+}
+entity PAGAMENTO {
+  método, status, valor, código PIX, datas
+}
+
+USUARIO ||--o{ PEDIDO : realiza
+PEDIDO ||--|{ ITEM_PEDIDO : possui
+CUPCAKE ||--o{ ITEM_PEDIDO : "é vendido em"
+PEDIDO ||--|| PAGAMENTO : "é pago por"
+@enduml
