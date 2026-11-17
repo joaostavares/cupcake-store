@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Carrinho · Cupcakes Gourmet</title>
+  <meta name="description" content="Cupcakes artesanais com entrega. Peça online e pague com PIX.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/pagina-carrinho.js"></script>
+</head>
+<body>
+<header id="topo" class="topo"></header>
+<main class="container">
+  <h1>Seu carrinho</h1>
+  <div id="mensagem" hidden></div>
+  <div class="layout-2">
+    <section class="painel">
+      <div id="itens" class="tabela-wrap"><p class="carregando">Carregando…</p></div>
+    </section>
+    <aside class="painel" id="painel-resumo" hidden>
+      <h2>Resumo</h2>
+      <div class="resumo">
+        <div class="linha"><span>Subtotal</span><span id="subtotal">—</span></div>
+        <div class="linha"><span>Frete</span><span id="frete">—</span></div>
+        <div class="linha total"><span>Total</span><span id="total">—</span></div>
+      </div>
+      <p class="dica">Frete grátis a partir de R$ 100,00. Abaixo disso, R$ 10,00.</p>
+      <div class="acoes">
+        <a class="btn btn-secundario" href="index.html">Continuar comprando</a>
+        <button type="button" class="btn" id="btn-finalizar">Finalizar compra</button>
+      </div>
+    </aside>
+  </div>
+</main>
+<footer class="rodape">Cupcakes Gourmet · Projeto Integrador Transdisciplinar em Engenharia de Software II</footer>
+</body>
+</html>

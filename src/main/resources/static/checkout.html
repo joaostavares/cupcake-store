@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Finalizar pedido · Cupcakes Gourmet</title>
+  <meta name="description" content="Cupcakes artesanais com entrega. Peça online e pague com PIX.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/checkout.js"></script>
+</head>
+<body>
+<header id="topo" class="topo"></header>
+<main class="container">
+  <h1>Finalizar pedido</h1>
+  <div id="mensagem" hidden></div>
+  <div class="layout-2" id="conteudo" hidden>
+    <section class="painel">
+      <h2>Itens</h2>
+      <div id="itens" class="tabela-wrap"></div>
+      <div class="resumo">
+        <div class="linha"><span>Subtotal</span><span id="subtotal"></span></div>
+        <div class="linha"><span>Frete</span><span id="frete"></span></div>
+        <div class="linha total"><span>Total</span><span id="total"></span></div>
+      </div>
+    </section>
+    <form class="painel" id="form-checkout" novalidate>
+      <h2>Entrega e pagamento</h2>
+      <div class="campo">
+        <label for="enderecoEntrega">Endereço de entrega</label>
+        <textarea id="enderecoEntrega" name="enderecoEntrega" rows="3" maxlength="255" required></textarea>
+      </div>
+      <fieldset class="campo">
+        <legend>Forma de pagamento</legend>
+        <label class="campo-inline"><input type="radio" name="metodo" value="PIX" checked> PIX</label>
+      </fieldset>
+      <div class="acoes">
+        <a class="btn btn-secundario" href="carrinho.html">Voltar ao carrinho</a>
+        <button class="btn" type="submit" id="btn-pagar">Pagar com PIX</button>
+      </div>
+    </form>
+  </div>
+</main>
+<footer class="rodape">Cupcakes Gourmet · Projeto Integrador Transdisciplinar em Engenharia de Software II</footer>
+</body>
+</html>

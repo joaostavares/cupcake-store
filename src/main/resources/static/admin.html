@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administração · Cupcakes Gourmet</title>
+  <meta name="description" content="Cupcakes artesanais com entrega. Peça online e pague com PIX.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/admin.js"></script>
+</head>
+<body>
+<header id="topo" class="topo"></header>
+<main class="container">
+  <h1>Administração</h1>
+  <div class="abas" role="tablist">
+    <button type="button" role="tab" id="aba-catalogo" aria-selected="true" aria-controls="painel-catalogo">Catálogo e estoque</button>
+    <button type="button" role="tab" id="aba-pedidos" aria-selected="false" aria-controls="painel-pedidos">Pedidos</button>
+  </div>
+  <div id="mensagem" hidden></div>
+
+  <section id="painel-catalogo" role="tabpanel">
+    <div class="layout-2">
+      <div class="painel"><div id="tabela-cupcakes" class="tabela-wrap"><p class="carregando">Carregando…</p></div></div>
+      <form class="painel" id="form-cupcake" novalidate>
+        <h2 id="titulo-form">Novo cupcake</h2>
+        <input type="hidden" name="id">
+        <div class="campo"><label for="f-sabor">Sabor</label><input id="f-sabor" name="sabor" maxlength="80" required></div>
+        <div class="campo"><label for="f-descricao">Descrição</label><textarea id="f-descricao" name="descricao" rows="3" maxlength="500"></textarea></div>
+        <div class="campo"><label for="f-preco">Preço (R$)</label><input id="f-preco" name="preco" type="number" min="0.01" step="0.01" required></div>
+        <div class="campo"><label for="f-estoque">Estoque</label><input id="f-estoque" name="estoque" type="number" min="0" step="1" required></div>
+        <div class="campo"><label for="f-imagem">URL da imagem (opcional)</label><input id="f-imagem" name="imagemUrl" maxlength="255" placeholder="/img/cupcake-padrao.svg"></div>
+        <label class="campo-inline"><input type="checkbox" name="ativo" checked> Ativo (aparece na vitrine)</label>
+        <div class="acoes">
+          <button class="btn" type="submit">Salvar</button>
+          <button class="btn btn-secundario" type="button" id="btn-novo">Limpar</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section id="painel-pedidos" role="tabpanel" hidden>
+    <div class="painel">
+      <div class="campo-inline">
+        <label for="filtro-status">Status:</label>
+        <select id="filtro-status">
+          <option value="">Todos</option>
+          <option value="AGUARDANDO_PAGAMENTO">Aguardando pagamento</option>
+          <option value="PAGO">Pago</option>
+          <option value="EM_PREPARO">Em preparo</option>
+          <option value="ENVIADO">Enviado</option>
+          <option value="ENTREGUE">Entregue</option>
+          <option value="CANCELADO">Cancelado</option>
+        </select>
+      </div>
+      <div id="tabela-pedidos" class="tabela-wrap"></div>
+    </div>
+  </section>
+</main>
+<footer class="rodape">Cupcakes Gourmet · Projeto Integrador Transdisciplinar em Engenharia de Software II</footer>
+</body>
+</html>

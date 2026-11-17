@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Entrar · Cupcakes Gourmet</title>
+  <meta name="description" content="Cupcakes artesanais com entrega. Peça online e pague com PIX.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/login.js"></script>
+</head>
+<body>
+<header id="topo" class="topo"></header>
+<main class="container">
+  <div class="form-estreito">
+    <div class="abas" role="tablist">
+      <button type="button" role="tab" id="aba-login" aria-selected="true" aria-controls="form-login">Entrar</button>
+      <button type="button" role="tab" id="aba-cadastro" aria-selected="false" aria-controls="form-cadastro">Criar conta</button>
+    </div>
+    <div id="mensagem" hidden></div>
+
+    <form id="form-login" class="painel" novalidate>
+      <h1>Entrar</h1>
+      <div class="campo"><label for="login-email">E-mail</label><input id="login-email" name="email" type="email" autocomplete="username" required></div>
+      <div class="campo"><label for="login-senha">Senha</label><input id="login-senha" name="senha" type="password" autocomplete="current-password" required></div>
+      <button class="btn btn-bloco" type="submit">Entrar</button>
+      <p class="dica">Conta de demonstração: cliente@cupcakes.com / Cliente@123</p>
+    </form>
+
+    <form id="form-cadastro" class="painel" novalidate hidden>
+      <h1>Criar conta</h1>
+      <div class="campo"><label for="cad-nome">Nome completo</label><input id="cad-nome" name="nome" autocomplete="name" maxlength="100" required></div>
+      <div class="campo"><label for="cad-email">E-mail</label><input id="cad-email" name="email" type="email" autocomplete="email" maxlength="150" required></div>
+      <div class="campo"><label for="cad-senha">Senha (mínimo 6 caracteres)</label><input id="cad-senha" name="senha" type="password" autocomplete="new-password" minlength="6" maxlength="72" required></div>
+      <div class="campo"><label for="cad-telefone">Telefone (opcional)</label><input id="cad-telefone" name="telefone" type="tel" autocomplete="tel" maxlength="20"></div>
+      <div class="campo"><label for="cad-endereco">Endereço de entrega (opcional)</label><input id="cad-endereco" name="endereco" autocomplete="street-address" maxlength="255"></div>
+      <button class="btn btn-bloco" type="submit">Cadastrar</button>
+    </form>
+  </div>
+</main>
+<footer class="rodape">Cupcakes Gourmet · Projeto Integrador Transdisciplinar em Engenharia de Software II</footer>
+</body>
+</html>

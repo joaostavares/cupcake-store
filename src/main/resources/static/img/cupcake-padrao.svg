@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Cupcake">
+  <rect width="200" height="200" fill="#fdf3f7"/>
+  <path d="M55 110 L145 110 L132 175 L68 175 Z" fill="#e3b98f"/>
+  <path d="M62 118 L72 172 M80 115 L86 174 M100 115 L100 175 M120 115 L114 174 M138 118 L128 172" stroke="#00000022" stroke-width="4"/>
+  <ellipse cx="100" cy="108" rx="54" ry="16" fill="#f4c2d7"/>
+  <path d="M50 108 C45 85 70 72 82 78 C80 55 120 50 122 74 C140 66 160 88 150 108 Z" fill="#f4c2d7"/>
+  <path d="M70 92 C85 82 115 82 130 92" stroke="#ffffff66" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <circle cx="100" cy="52" r="10" fill="#d6336c"/>
+  <path d="M100 42 C102 34 108 30 112 28" stroke="#4a7c3a" stroke-width="3" fill="none"/>
+</svg>
