@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: cupcakes-postgres
+    environment:
+      POSTGRES_DB: cupcakes
+      POSTGRES_USER: cupcakes
+      POSTGRES_PASSWORD: cupcakes
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cupcakes -d cupcakes"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Opcional: sobe a aplicação também em container (docker compose --profile app up)
+  app:
+    profiles: ["app"]
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:

@@ -1,0 +1,59 @@
+server:
+  port: ${PORT:8080}
+  servlet:
+    session:
+      timeout: 2h
+      cookie:
+        http-only: true
+        same-site: lax
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: cupcakes-gourmet
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:cupcakes}
+    username: ${DB_USER:cupcakes}
+    password: ${DB_PASSWORD:cupcakes}
+    hikari:
+      maximum-pool-size: 5
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  mvc:
+    problemdetails:
+      enabled: true
+  jackson:
+    default-property-inclusion: non_null
+    time-zone: America/Sao_Paulo
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+app:
+  admin:
+    email: ${ADMIN_EMAIL:admin@cupcakes.com}
+    senha: ${ADMIN_PASSWORD:Admin@123}
+  demo:
+    criar-cliente: ${DEMO_CLIENTE:true}
+    email: cliente@cupcakes.com
+    senha: Cliente@123
+  pix:
+    chave: pix@cupcakesgourmet.com.br
+    nome-recebedor: CUPCAKES GOURMET
+    cidade: SAO PAULO
