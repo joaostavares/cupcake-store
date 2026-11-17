@@ -1,0 +1,15 @@
+Evidência E01 — Teste de concorrência do checkout SEM o bloqueio pessimista (prova negativa)
+Data: 2026-11-17 · Banco: PostgreSQL 16 (local) · Teste: CheckoutConcorrenciaPostgresIT.naoVendeAlemDoEstoque
+
+Procedimento: @Lock(LockModeType.PESSIMISTIC_WRITE) comentado em CupcakeRepository.findAllByIdForUpdate;
+10 threads tentam comprar 1 unidade cada de um cupcake com estoque 5.
+
+Saída do Maven:
+[ERROR] Tests run: 2, Failures: 1, Errors: 0, Skipped: 0 <<< FAILURE! -- in br.com.cupcakesgourmet.api.CheckoutConcorrenciaPostgresIT
+[ERROR] br.com.cupcakesgourmet.api.CheckoutConcorrenciaPostgresIT.naoVendeAlemDoEstoque <<< FAILURE!
+org.opentest4j.AssertionFailedError:
+expected: 5
+ but was: 10
+
+Resultado: 10 pedidos aceitos para 5 unidades (venda acima do estoque — problema 10 da modelagem do PIT I).
+Com o lock restaurado, o mesmo teste passa: 5 vendidos, 5 recusados com "Estoque insuficiente", estoque final 0.
