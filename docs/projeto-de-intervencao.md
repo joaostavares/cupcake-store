@@ -45,11 +45,11 @@ pede a entrega em HTML, CSS e JavaScript.
 4. Testes automatizados de cada camada, incluindo um teste de concorrência com 10 compras simultâneas.
 5. Implementação do front-end: vitrine, carrinho, login/cadastro, checkout, PIX, meus pedidos e administração.
 6. Validação ponta a ponta no navegador, registro dos defeitos encontrados, correção e reexecução.
-7. Publicação no Render (Docker + PostgreSQL) e gravação dos vídeos. ✏️ _confirmar_
+7. Publicação no Render (Docker + PostgreSQL) e gravação dos vídeos.
 
 ## Resultados
 
-- Sistema funcional com 10 casos de uso, publicado em ✏️ _link do Render_.
+- Sistema funcional com 10 casos de uso, publicado em https://cupcakes-gourmet-2sgd.onrender.com/.
 - **79 testes automatizados aprovados**, cobertura de **95% das linhas e 89% dos ramos**; **21/21** verificações
   do roteiro no navegador.
 - **6 defeitos encontrados e corrigidos** na validação, com evidências antes/depois — o mais grave permitia que a
@@ -61,7 +61,7 @@ pede a entrega em HTML, CSS e JavaScript.
   sem limite de tentativas de login.
 
 **Links**
-- Repositório: ✏️ _https://github.com/…_
-- Aplicação: ✏️ _https://….onrender.com_
+- Repositório: https://github.com/joaostavares/cupcake-store
+- Aplicação: https://cupcakes-gourmet-2sgd.onrender.com/
 - Vídeo narrado: ✏️
 - Vídeo das correções: ✏️

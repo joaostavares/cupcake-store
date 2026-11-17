@@ -6,7 +6,7 @@ Autor: **João Serafini Tavares**.
 
 | | |
 |---|---|
-| **Aplicação hospedada** | _a preencher após o deploy no Render_ |
+| **Aplicação hospedada** | **https://cupcakes-gourmet-2sgd.onrender.com/** (plano gratuito: o 1º acesso após inatividade leva ~1 min) |
 | **Vídeo narrado (≥ 5 min)** | _a preencher_ |
 | **Vídeo das correções (≤ 5 min)** | _a preencher_ |
 
@@ -17,7 +17,7 @@ Autor: **João Serafini Tavares**.
 | Linguagem do back-end | Java 21 (Spring Boot 3.5, arquitetura MVC em camadas) |
 | Front-end | HTML5, CSS3 e JavaScript (ES modules, sem framework) |
 | Banco de dados | PostgreSQL 16 (schema versionado com Flyway) |
-| Hospedagem | Render (Web Service Docker + PostgreSQL gerenciado) |
+| Hospedagem | Render (Web Service Docker + PostgreSQL gerenciado) — https://cupcakes-gourmet-2sgd.onrender.com/ |
 | Plataforma | Web responsiva (desktop e celular) |
 | Modo | Tradicional |
 | Testes | JUnit 5, Mockito, MockMvc, Testcontainers, Playwright (E2E), JaCoCo |
