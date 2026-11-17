@@ -42,7 +42,7 @@ Diagrama: [../situacao-1/uml/classes-camadas.png](../situacao-1/uml/classes-cama
 | POST | `/api/pedidos/{id}/cancelar` | dono/admin | Cancela e devolve estoque | 200, 404, 422 |
 | GET | `/api/admin/cupcakes` | admin | Todos os cupcakes | 200, 403 |
 | POST | `/api/admin/cupcakes` | admin | Cadastrar | 201, 400, 409 |
-| PUT | `/api/admin/cupcakes/{id}` | admin | Editar / ativar / desativar | 200, 400, 404, 409 |
+| PUT | `/api/admin/cupcakes/{id}` | admin | Editar / ativar / desativar (não altera estoque — RN11) | 200, 400, 404, 409 |
 | PATCH | `/api/admin/cupcakes/{id}/estoque` | admin | Definir estoque | 200, 400, 404 |
 | GET | `/api/admin/pedidos?status=` | admin | Pedidos (filtro opcional) | 200 |
 | PATCH | `/api/admin/pedidos/{id}/status` | admin | Avançar status (RN07) | 200, 400, 404, 422 |

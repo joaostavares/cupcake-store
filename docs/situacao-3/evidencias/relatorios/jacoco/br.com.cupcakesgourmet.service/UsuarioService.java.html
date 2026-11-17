@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UsuarioService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Cupcakes Gourmet</a> &gt; <a href="index.source.html" class="el_package">br.com.cupcakesgourmet.service</a> &gt; <span class="el_source">UsuarioService.java</span></div><h1>UsuarioService.java</h1><pre class="source lang-java linenums">package br.com.cupcakesgourmet.service;
+
+import br.com.cupcakesgourmet.dto.CadastroRequest;
+import br.com.cupcakesgourmet.dto.UsuarioResponse;
+import br.com.cupcakesgourmet.exception.ConflitoException;
+import br.com.cupcakesgourmet.exception.RecursoNaoEncontradoException;
+import br.com.cupcakesgourmet.model.Papel;
+import br.com.cupcakesgourmet.model.Usuario;
+import br.com.cupcakesgourmet.repository.UsuarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Locale;
+
+@Service
+public class UsuarioService {
+
+    private final UsuarioRepository repository;
+    private final PasswordEncoder passwordEncoder;
+
+<span class="fc" id="L22">    public UsuarioService(UsuarioRepository repository, PasswordEncoder passwordEncoder) {</span>
+<span class="fc" id="L23">        this.repository = repository;</span>
+<span class="fc" id="L24">        this.passwordEncoder = passwordEncoder;</span>
+<span class="fc" id="L25">    }</span>
+
+    /** RN06 — e-mail único (normalizado em minúsculas) e senha com hash BCrypt. */
+    @Transactional
+    public UsuarioResponse cadastrar(CadastroRequest req) {
+<span class="fc" id="L30">        return UsuarioResponse.de(criar(req.nome(), req.email(), req.senha(), req.telefone(), req.endereco(), Papel.CLIENTE));</span>
+    }
+
+    @Transactional
+    public Usuario criar(String nome, String email, String senha, String telefone, String endereco, Papel papel) {
+<span class="fc" id="L35">        String emailNormalizado = normalizarEmail(email);</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (repository.existsByEmail(emailNormalizado)) {</span>
+<span class="fc" id="L37">            throw new ConflitoException(&quot;Este e-mail já está cadastrado. Faça login ou use outro e-mail.&quot;);</span>
+        }
+<span class="fc" id="L39">        Usuario u = new Usuario();</span>
+<span class="fc" id="L40">        u.setNome(nome.trim());</span>
+<span class="fc" id="L41">        u.setEmail(emailNormalizado);</span>
+<span class="fc" id="L42">        u.setSenhaHash(passwordEncoder.encode(senha));</span>
+<span class="fc" id="L43">        u.setTelefone(vazioParaNulo(telefone));</span>
+<span class="fc" id="L44">        u.setEndereco(vazioParaNulo(endereco));</span>
+<span class="fc" id="L45">        u.setPapel(papel);</span>
+<span class="fc" id="L46">        return repository.save(u);</span>
+    }
+
+    @Transactional(readOnly = true)
+    public UsuarioResponse buscar(Long id) {
+<span class="fc" id="L51">        return repository.findById(id).map(UsuarioResponse::de)</span>
+<span class="pc" id="L52">                .orElseThrow(() -&gt; new RecursoNaoEncontradoException(&quot;Usuário não encontrado.&quot;));</span>
+    }
+
+    public static String normalizarEmail(String email) {
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        return email == null ? null : email.trim().toLowerCase(Locale.ROOT);</span>
+    }
+
+    private static String vazioParaNulo(String s) {
+<span class="fc bfc" id="L60" title="All 4 branches covered.">        return s == null || s.isBlank() ? null : s.trim();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -99,7 +99,8 @@ Entre com a conta de administrador. O menu **Administração** aparece no topo.
 ### 2.1 Catálogo e estoque
 - **Cadastrar:** preencha o formulário à direita (sabor, descrição, preço, estoque, URL da imagem opcional) e
   clique em **Salvar**.
-- **Editar:** clique em **Editar** na linha do cupcake; o formulário é preenchido.
+- **Editar:** clique em **Editar** na linha do cupcake; o formulário é preenchido. O campo Estoque fica
+  bloqueado na edição — o estoque é alterado só pela tabela (assim uma venda feita enquanto você edita não é desfeita).
 - **Ativar/desativar:** marque ou desmarque **Ativo** e salve. Cupcakes inativos somem da vitrine, mas continuam
   nos pedidos antigos (não existe exclusão, para preservar o histórico).
 - **Repor estoque:** altere o número na coluna Estoque e clique em **Salvar** na mesma linha.

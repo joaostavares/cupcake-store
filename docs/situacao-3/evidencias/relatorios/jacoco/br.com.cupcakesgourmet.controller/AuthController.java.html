@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Cupcakes Gourmet</a> &gt; <a href="index.source.html" class="el_package">br.com.cupcakesgourmet.controller</a> &gt; <span class="el_source">AuthController.java</span></div><h1>AuthController.java</h1><pre class="source lang-java linenums">package br.com.cupcakesgourmet.controller;
+
+import br.com.cupcakesgourmet.dto.CadastroRequest;
+import br.com.cupcakesgourmet.dto.LoginRequest;
+import br.com.cupcakesgourmet.dto.UsuarioResponse;
+import br.com.cupcakesgourmet.security.UsuarioLogado;
+import br.com.cupcakesgourmet.service.UsuarioService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/** CU04 — Cadastro e login (logout é tratado pelo Spring Security em POST /api/auth/logout). */
+@RestController
+@RequestMapping(&quot;/api/auth&quot;)
+public class AuthController {
+
+    private final UsuarioService usuarioService;
+    private final AuthenticationManager authenticationManager;
+    private final SecurityContextRepository securityContextRepository;
+
+    public AuthController(UsuarioService usuarioService, AuthenticationManager authenticationManager,
+<span class="fc" id="L36">                          SecurityContextRepository securityContextRepository) {</span>
+<span class="fc" id="L37">        this.usuarioService = usuarioService;</span>
+<span class="fc" id="L38">        this.authenticationManager = authenticationManager;</span>
+<span class="fc" id="L39">        this.securityContextRepository = securityContextRepository;</span>
+<span class="fc" id="L40">    }</span>
+
+    @PostMapping(&quot;/cadastro&quot;)
+    public ResponseEntity&lt;UsuarioResponse&gt; cadastrar(@Valid @RequestBody CadastroRequest req,
+                                                     HttpServletRequest request, HttpServletResponse response) {
+<span class="fc" id="L45">        UsuarioResponse usuario = usuarioService.cadastrar(req);</span>
+<span class="fc" id="L46">        autenticar(req.email(), req.senha(), request, response);</span>
+<span class="fc" id="L47">        return ResponseEntity.status(HttpStatus.CREATED).body(usuario);</span>
+    }
+
+    @PostMapping(&quot;/login&quot;)
+    public UsuarioResponse login(@Valid @RequestBody LoginRequest req, HttpServletRequest request,
+                                 HttpServletResponse response) {
+<span class="fc" id="L53">        UsuarioLogado logado = autenticar(req.email(), req.senha(), request, response);</span>
+<span class="fc" id="L54">        return usuarioService.buscar(logado.getId());</span>
+    }
+
+    /** 200 com os dados do usuário logado, ou 204 se for visitante. */
+    @GetMapping(&quot;/me&quot;)
+    public ResponseEntity&lt;UsuarioResponse&gt; me(@AuthenticationPrincipal UsuarioLogado usuario) {
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (usuario == null) {</span>
+<span class="fc" id="L61">            return ResponseEntity.noContent().build();</span>
+        }
+<span class="fc" id="L63">        return ResponseEntity.ok(usuarioService.buscar(usuario.getId()));</span>
+    }
+
+    private UsuarioLogado autenticar(String email, String senha, HttpServletRequest request, HttpServletResponse response) {
+<span class="fc" id="L67">        Authentication auth = authenticationManager.authenticate(</span>
+<span class="fc" id="L68">                UsernamePasswordAuthenticationToken.unauthenticated(UsuarioService.normalizarEmail(email), senha));</span>
+<span class="fc" id="L69">        SecurityContext context = SecurityContextHolder.createEmptyContext();</span>
+<span class="fc" id="L70">        context.setAuthentication(auth);</span>
+<span class="fc" id="L71">        SecurityContextHolder.setContext(context);</span>
+<span class="fc" id="L72">        request.getSession(true);</span>
+<span class="fc" id="L73">        request.changeSessionId(); // proteção contra fixação de sessão</span>
+<span class="fc" id="L74">        securityContextRepository.saveContext(context, request, response);</span>
+<span class="fc" id="L75">        return (UsuarioLogado) auth.getPrincipal();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -14,26 +14,31 @@ package "controller (C do MVC — API REST)" {
 package "service (regras de negócio)" {
   class CupcakeService {
     +listarVitrine(): List<CupcakeResponse>
+    +listarTodos(): List<CupcakeResponse>
     +criar(req): CupcakeResponse
-    +atualizar(id, req): CupcakeResponse
-    +ajustarEstoque(id, novoEstoque): CupcakeResponse
+    +atualizar(id, req): CupcakeResponse  // não altera estoque (RN11)
+    +definirEstoque(id, estoque): CupcakeResponse
   }
   class UsuarioService {
     +cadastrar(req): UsuarioResponse
+    +buscar(id): UsuarioResponse
   }
   class PedidoService {
     +cotar(itens): CotacaoResponse
-    +criarPedido(usuario, req): PedidoResponse
-    +confirmarPagamento(pedidoId, usuario): PedidoResponse
-    +cancelar(pedidoId, usuario): PedidoResponse
-    +atualizarStatus(pedidoId, status): PedidoResponse
+    +criarPedido(usuarioId, req): PedidoResponse
+    +listarDoUsuario(usuarioId): List<PedidoResponse>
+    +listarTodos(status): List<PedidoResponse>
+    +buscar(pedidoId, ator): PedidoResponse
+    +confirmarPagamento(pedidoId, ator): PedidoResponse
+    +cancelar(pedidoId, ator): PedidoResponse
+    +atualizarStatus(pedidoId, status, admin): PedidoResponse
   }
   class CalculadoraFrete <<RN02>> {
     +calcularFrete(subtotal): BigDecimal
   }
   class PixService {
     +gerarCodigo(pedidoId, valor): String
-    +gerarQrCodePng(codigo): byte[]
+    +gerarQrCodePng(codigo, tamanho): byte[]
   }
 }
 package "repository (Spring Data JPA)" {
@@ -41,7 +46,9 @@ package "repository (Spring Data JPA)" {
   interface CupcakeRepository {
     +findAllByIdForUpdate(ids): List<Cupcake>
   }
-  interface PedidoRepository
+  interface PedidoRepository {
+    +findByIdForUpdate(id): Optional<Pedido>
+  }
 }
 package "model (M do MVC — entidades JPA)" {
   class Usuario

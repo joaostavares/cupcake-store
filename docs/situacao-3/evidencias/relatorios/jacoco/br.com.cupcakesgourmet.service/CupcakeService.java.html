@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CupcakeService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Cupcakes Gourmet</a> &gt; <a href="index.source.html" class="el_package">br.com.cupcakesgourmet.service</a> &gt; <span class="el_source">CupcakeService.java</span></div><h1>CupcakeService.java</h1><pre class="source lang-java linenums">package br.com.cupcakesgourmet.service;
+
+import br.com.cupcakesgourmet.dto.CupcakeRequest;
+import br.com.cupcakesgourmet.dto.CupcakeResponse;
+import br.com.cupcakesgourmet.exception.ConflitoException;
+import br.com.cupcakesgourmet.exception.RecursoNaoEncontradoException;
+import br.com.cupcakesgourmet.model.Cupcake;
+import br.com.cupcakesgourmet.repository.CupcakeRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+public class CupcakeService {
+
+    private final CupcakeRepository repository;
+
+<span class="fc" id="L19">    public CupcakeService(CupcakeRepository repository) {</span>
+<span class="fc" id="L20">        this.repository = repository;</span>
+<span class="fc" id="L21">    }</span>
+
+    @Transactional(readOnly = true)
+    public List&lt;CupcakeResponse&gt; listarVitrine() {
+<span class="fc" id="L25">        return repository.findByAtivoTrueOrderBySaborAsc().stream().map(CupcakeResponse::de).toList();</span>
+    }
+
+    @Transactional(readOnly = true)
+    public CupcakeResponse buscarNaVitrine(Long id) {
+<span class="pc" id="L30">        return repository.findByIdAndAtivoTrue(id).map(CupcakeResponse::de)</span>
+<span class="pc" id="L31">                .orElseThrow(() -&gt; new RecursoNaoEncontradoException(&quot;Cupcake não encontrado.&quot;));</span>
+    }
+
+    @Transactional(readOnly = true)
+    public List&lt;CupcakeResponse&gt; listarTodos() {
+<span class="fc" id="L36">        return repository.findAllByOrderBySaborAsc().stream().map(CupcakeResponse::de).toList();</span>
+    }
+
+    @Transactional
+    public CupcakeResponse criar(CupcakeRequest req) {
+<span class="fc" id="L41">        String sabor = req.sabor().trim();</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (repository.existsBySaborIgnoreCase(sabor)) {</span>
+<span class="fc" id="L43">            throw new ConflitoException(&quot;Já existe um cupcake com o sabor '%s'.&quot;.formatted(sabor));</span>
+        }
+<span class="fc" id="L45">        Cupcake cupcake = new Cupcake();</span>
+<span class="fc" id="L46">        preencher(cupcake, req, sabor);</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">        cupcake.setEstoque(req.estoque() == null ? 0 : req.estoque());</span>
+<span class="fc" id="L48">        return CupcakeResponse.de(repository.save(cupcake));</span>
+    }
+
+    /**
+     * Edita os dados cadastrais. O estoque NÃO é alterado aqui: o valor que vem do formulário pode estar
+     * desatualizado e desfaria vendas feitas enquanto o admin editava (defeito D05 — lost update).
+     */
+    @Transactional
+    public CupcakeResponse atualizar(Long id, CupcakeRequest req) {
+<span class="fc" id="L57">        Cupcake cupcake = buscar(id);</span>
+<span class="fc" id="L58">        String sabor = req.sabor().trim();</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if (repository.existsBySaborIgnoreCaseAndIdNot(sabor, id)) {</span>
+<span class="nc" id="L60">            throw new ConflitoException(&quot;Já existe um cupcake com o sabor '%s'.&quot;.formatted(sabor));</span>
+        }
+<span class="fc" id="L62">        preencher(cupcake, req, sabor);</span>
+<span class="fc" id="L63">        return CupcakeResponse.de(cupcake);</span>
+    }
+
+    @Transactional
+    public CupcakeResponse definirEstoque(Long id, int estoque) {
+<span class="fc" id="L68">        Cupcake cupcake = repository.findAllByIdForUpdate(List.of(id)).stream().findFirst()</span>
+<span class="pc" id="L69">                .orElseThrow(() -&gt; new RecursoNaoEncontradoException(&quot;Cupcake não encontrado.&quot;));</span>
+<span class="fc" id="L70">        cupcake.setEstoque(estoque);</span>
+<span class="fc" id="L71">        return CupcakeResponse.de(cupcake);</span>
+    }
+
+    private Cupcake buscar(Long id) {
+<span class="fc" id="L75">        return repository.findById(id).orElseThrow(() -&gt; new RecursoNaoEncontradoException(&quot;Cupcake não encontrado.&quot;));</span>
+    }
+
+    private static void preencher(Cupcake cupcake, CupcakeRequest req, String sabor) {
+<span class="fc" id="L79">        cupcake.setSabor(sabor);</span>
+<span class="fc" id="L80">        cupcake.setDescricao(vazioParaNulo(req.descricao()));</span>
+<span class="fc" id="L81">        cupcake.setPreco(req.preco());</span>
+<span class="fc" id="L82">        cupcake.setImagemUrl(vazioParaNulo(req.imagemUrl()));</span>
+<span class="fc bfc" id="L83" title="All 4 branches covered.">        cupcake.setAtivo(req.ativo() == null || req.ativo());</span>
+<span class="fc" id="L84">    }</span>
+
+    private static String vazioParaNulo(String s) {
+<span class="fc bfc" id="L87" title="All 4 branches covered.">        return s == null || s.isBlank() ? null : s.trim();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

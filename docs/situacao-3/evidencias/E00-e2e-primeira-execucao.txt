@@ -1,0 +1,28 @@
+Evidência E00 — Primeira execução do roteiro E2E (scripts/e2e-capturas.mjs), versão 91b86ff
+Data: 2026-11-17 19:38 · App local + PostgreSQL 16 (banco recém-criado) · Chromium headless
+
+OK   CT01 Vitrine pública lista cupcakes sem login
+OK   CT02 Cupcake sem estoque aparece como Esgotado e sem compra
+OK   CT03 Adicionar ao carrinho atualiza contador (5 itens)
+OK   CT04 Adicionar acima do estoque exibe MSG04
+OK   CT05 Carrinho: subtotal 70,50 + frete 10,00 = total 80,50 (RN02)
+OK   CT06 Login inválido exibe MSG01
+OK   CT07 Após login volta ao checkout com endereço pré-preenchido
+FALHA CT08 Pedido criado (AGUARDANDO_PAGAMENTO) com QR Code e PIX copia e cola
+OK   CT09 Carrinho esvaziado após o pedido
+OK   CT10 Simular pagamento muda o pedido para Pago
+OK   CT11 Meus pedidos lista o pedido pago
+OK   CT12 Estoque zerado antes do checkout exibe MSG05 e não cria pedido
+OK   CT13 Admin: formulário inválido destaca campos (MSG03)
+OK   CT14 Admin cadastra novo cupcake
+OK   CT15 Admin avança pedido de Pago para Em preparo
+OK   CT16 Cliente na página de admin vê MSG07
+OK   CT17 Cadastro com senha curta destaca o campo (MSG03)
+OK   CT18 Cadastro com e-mail existente exibe MSG02
+OK   CT19 Vitrine no celular (390px) sem rolagem horizontal
+OK   CT20 Nenhum erro de JavaScript no console
+
+19/20 verificações OK
+
+Análise: a captura de tela do mesmo momento mostrava o QR Code renderizado corretamente. A falha era do roteiro
+(verificava img.complete antes do download do PNG terminar) — defeito D01.

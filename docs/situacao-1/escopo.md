@@ -39,7 +39,7 @@ o produto passou a ser uma **aplicação web responsiva** (funciona no navegador
 
 | # | Problema no PIT I | Correção no PIT II | Onde ver |
 |---|-------------------|--------------------|----------|
-| 1 | RN01 e RN02 citadas, nunca definidas | Regras escritas e numeradas (RN01–RN10) | [regras-de-negocio.md](regras-de-negocio.md) |
+| 1 | RN01 e RN02 citadas, nunca definidas | Regras escritas e numeradas (RN01–RN11) | [regras-de-negocio.md](regras-de-negocio.md) |
 | 2 | TELA01–03 sem protótipo | Wireframes (PlantUML Salt) + telas reais + catálogo de mensagens | [ihc/](ihc/) |
 | 3 | Cliente sem e-mail/senha, mas com login | `email` (único) e `senhaHash` (BCrypt) | dicionário de dados |
 | 4 | ItemPedido sem preço unitário | `precoUnitario` congelado no momento da compra | RN04 |

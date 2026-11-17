@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Usuario.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Cupcakes Gourmet</a> &gt; <a href="index.source.html" class="el_package">br.com.cupcakesgourmet.model</a> &gt; <span class="el_source">Usuario.java</span></div><h1>Usuario.java</h1><pre class="source lang-java linenums">package br.com.cupcakesgourmet.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.Instant;
+
+@Entity
+@Table(name = &quot;usuario&quot;)
+<span class="fc" id="L17">public class Usuario {</span>
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 100)
+    private String nome;
+
+    @Column(nullable = false, unique = true, length = 150)
+    private String email;
+
+    @Column(name = &quot;senha_hash&quot;, nullable = false, length = 100)
+    private String senhaHash;
+
+    @Column(length = 20)
+    private String telefone;
+
+    @Column(length = 255)
+    private String endereco;
+
+<span class="fc" id="L38">    @Enumerated(EnumType.STRING)</span>
+    @Column(nullable = false, length = 20)
+    private Papel papel = Papel.CLIENTE;
+
+    @CreationTimestamp
+    @Column(name = &quot;criado_em&quot;, nullable = false, updatable = false)
+    private Instant criadoEm;
+
+<span class="fc" id="L46">    public Long getId() { return id; }</span>
+<span class="fc" id="L47">    public void setId(Long id) { this.id = id; }</span>
+<span class="fc" id="L48">    public String getNome() { return nome; }</span>
+<span class="fc" id="L49">    public void setNome(String nome) { this.nome = nome; }</span>
+<span class="fc" id="L50">    public String getEmail() { return email; }</span>
+<span class="fc" id="L51">    public void setEmail(String email) { this.email = email; }</span>
+<span class="fc" id="L52">    public String getSenhaHash() { return senhaHash; }</span>
+<span class="fc" id="L53">    public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; }</span>
+<span class="fc" id="L54">    public String getTelefone() { return telefone; }</span>
+<span class="fc" id="L55">    public void setTelefone(String telefone) { this.telefone = telefone; }</span>
+<span class="fc" id="L56">    public String getEndereco() { return endereco; }</span>
+<span class="fc" id="L57">    public void setEndereco(String endereco) { this.endereco = endereco; }</span>
+<span class="fc" id="L58">    public Papel getPapel() { return papel; }</span>
+<span class="fc" id="L59">    public void setPapel(Papel papel) { this.papel = papel; }</span>
+<span class="nc" id="L60">    public Instant getCriadoEm() { return criadoEm; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

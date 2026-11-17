@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SecurityConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Cupcakes Gourmet</a> &gt; <a href="index.source.html" class="el_package">br.com.cupcakesgourmet.config</a> &gt; <span class="el_source">SecurityConfig.java</span></div><h1>SecurityConfig.java</h1><pre class="source lang-java linenums">package br.com.cupcakesgourmet.config;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfException;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+
+import java.io.IOException;
+
+/**
+ * Autenticação por sessão (cookie JSESSIONID) + CSRF via cookie XSRF-TOKEN lido pelo JavaScript
+ * e devolvido no cabeçalho X-XSRF-TOKEN. Erros 401/403 saem como ProblemDetail em JSON.
+ */
+@Configuration
+@EnableWebSecurity
+<span class="fc" id="L36">public class SecurityConfig {</span>
+
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http, ObjectMapper objectMapper,
+                                    SecurityContextRepository securityContextRepository) throws Exception {
+<span class="fc" id="L41">        http</span>
+<span class="fc" id="L42">                .csrf(csrf -&gt; csrf</span>
+<span class="fc" id="L43">                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())</span>
+<span class="fc" id="L44">                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))</span>
+<span class="fc" id="L45">                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)</span>
+<span class="fc" id="L46">                .securityContext(ctx -&gt; ctx.securityContextRepository(securityContextRepository))</span>
+<span class="fc" id="L47">                .authorizeHttpRequests(auth -&gt; auth</span>
+<span class="fc" id="L48">                        .requestMatchers(HttpMethod.GET, &quot;/api/cupcakes&quot;, &quot;/api/cupcakes/**&quot;).permitAll()</span>
+<span class="fc" id="L49">                        .requestMatchers(HttpMethod.POST, &quot;/api/pedidos/cotacao&quot;).permitAll()</span>
+<span class="fc" id="L50">                        .requestMatchers(HttpMethod.POST, &quot;/api/auth/cadastro&quot;, &quot;/api/auth/login&quot;).permitAll()</span>
+<span class="fc" id="L51">                        .requestMatchers(HttpMethod.GET, &quot;/api/auth/me&quot;).permitAll()</span>
+<span class="fc" id="L52">                        .requestMatchers(&quot;/api/admin/**&quot;).hasRole(&quot;ADMIN&quot;)</span>
+<span class="fc" id="L53">                        .requestMatchers(&quot;/api/**&quot;).authenticated()</span>
+<span class="fc" id="L54">                        .anyRequest().permitAll())</span>
+<span class="fc" id="L55">                .exceptionHandling(ex -&gt; ex</span>
+<span class="fc" id="L56">                        .authenticationEntryPoint((req, res, e) -&gt;</span>
+<span class="fc" id="L57">                                escrever(res, objectMapper, HttpStatus.UNAUTHORIZED, &quot;Não autenticado&quot;, &quot;Faça login para continuar.&quot;))</span>
+<span class="fc" id="L58">                        .accessDeniedHandler((req, res, e) -&gt; {</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">                            if (e instanceof CsrfException) {</span>
+<span class="fc" id="L60">                                escrever(res, objectMapper, HttpStatus.FORBIDDEN, &quot;Sessão expirada&quot;,</span>
+                                        &quot;Sua sessão expirou ou o token de segurança é inválido. Recarregue a página.&quot;);
+                            } else {
+<span class="fc" id="L63">                                escrever(res, objectMapper, HttpStatus.FORBIDDEN, &quot;Acesso negado&quot;, &quot;Acesso restrito ao administrador.&quot;);</span>
+                            }
+<span class="fc" id="L65">                        }))</span>
+<span class="fc" id="L66">                .logout(logout -&gt; logout</span>
+<span class="fc" id="L67">                        .logoutUrl(&quot;/api/auth/logout&quot;)</span>
+<span class="fc" id="L68">                        .logoutSuccessHandler((req, res, auth) -&gt; res.setStatus(HttpStatus.NO_CONTENT.value())))</span>
+<span class="fc" id="L69">                .formLogin(AbstractHttpConfigurer::disable)</span>
+<span class="fc" id="L70">                .httpBasic(AbstractHttpConfigurer::disable)</span>
+<span class="fc" id="L71">                .headers(h -&gt; h.contentSecurityPolicy(csp -&gt; csp.policyDirectives(</span>
+                        &quot;default-src 'self'; img-src 'self' data: https:; style-src 'self'; script-src 'self'; frame-ancestors 'none'&quot;)));
+<span class="fc" id="L73">        return http.build();</span>
+    }
+
+    @Bean
+    SecurityContextRepository securityContextRepository() {
+<span class="fc" id="L78">        return new HttpSessionSecurityContextRepository();</span>
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+<span class="fc" id="L83">        return new BCryptPasswordEncoder();</span>
+    }
+
+    @Bean
+    AuthenticationManager authenticationManager(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+<span class="fc" id="L88">        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);</span>
+<span class="fc" id="L89">        provider.setPasswordEncoder(passwordEncoder);</span>
+<span class="fc" id="L90">        return new ProviderManager(provider);</span>
+    }
+
+    private static void escrever(HttpServletResponse res, ObjectMapper om, HttpStatus status, String titulo,
+                                 String detalhe) throws IOException {
+<span class="fc" id="L95">        ProblemDetail problem = ProblemDetail.forStatusAndDetail(status, detalhe);</span>
+<span class="fc" id="L96">        problem.setTitle(titulo);</span>
+<span class="fc" id="L97">        res.setStatus(status.value());</span>
+<span class="fc" id="L98">        res.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);</span>
+<span class="fc" id="L99">        res.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="fc" id="L100">        om.writeValue(res.getOutputStream(), problem);</span>
+<span class="fc" id="L101">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
