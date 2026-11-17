@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 /**
  * Cria o administrador (credenciais via variáveis ADMIN_EMAIL / ADMIN_PASSWORD) e um cliente de demonstração,
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 class DadosIniciais implements ApplicationRunner {
+
+    private static final String SENHA_ADMIN_PADRAO = "Admin@123";
 
     private static final Logger log = LoggerFactory.getLogger(DadosIniciais.class);
 
@@ -32,7 +35,12 @@ class DadosIniciais implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         String adminEmail = UsuarioService.normalizarEmail(props.admin().email());
         if (!usuarioRepository.existsByEmail(adminEmail)) {
-            usuarioService.criar("Administrador", adminEmail, props.admin().senha(), null, null, Papel.ADMIN);
+            String senha = props.admin().senha();
+            if (!StringUtils.hasText(senha)) {
+                senha = SENHA_ADMIN_PADRAO;
+                log.warn("ADMIN_PASSWORD vazia: usando a senha padrão documentada no README. Troque em produção.");
+            }
+            usuarioService.criar("Administrador", adminEmail, senha, null, null, Papel.ADMIN);
             log.info("Administrador criado: {}", adminEmail);
         }
         if (props.demo().criarCliente()) {

@@ -12,7 +12,7 @@ spring:
   application:
     name: cupcakes-gourmet
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:cupcakes}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:cupcakes}${DB_PARAMS:}
     username: ${DB_USER:cupcakes}
     password: ${DB_PASSWORD:cupcakes}
     hikari:
