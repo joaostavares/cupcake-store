@@ -58,6 +58,8 @@ function limparForm() {
   form.reset();
   form.elements.id.value = '';
   form.elements.ativo.checked = true;
+  form.elements.estoque.disabled = false;
+  document.getElementById('dica-estoque').hidden = true;
   document.getElementById('titulo-form').textContent = 'Novo cupcake';
   mostrarErrosDeCampo(form, {});
 }
@@ -73,6 +75,8 @@ tabelaCupcakes.addEventListener('click', async (ev) => {
     form.elements.descricao.value = c.descricao || '';
     form.elements.preco.value = c.preco;
     form.elements.estoque.value = c.estoque;
+    form.elements.estoque.disabled = true; // estoque se altera pela tabela (D05)
+    document.getElementById('dica-estoque').hidden = false;
     form.elements.imagemUrl.value = c.imagemUrl || '';
     form.elements.ativo.checked = c.ativo;
     document.getElementById('titulo-form').textContent = `Editar: ${c.sabor}`;
@@ -101,7 +105,7 @@ form.addEventListener('submit', async (ev) => {
     sabor: form.elements.sabor.value,
     descricao: form.elements.descricao.value,
     preco: form.elements.preco.value === '' ? null : Number(form.elements.preco.value),
-    estoque: form.elements.estoque.value === '' ? null : Number(form.elements.estoque.value),
+    estoque: id || form.elements.estoque.value === '' ? null : Number(form.elements.estoque.value),
     imagemUrl: form.elements.imagemUrl.value,
     ativo: form.elements.ativo.checked,
   };

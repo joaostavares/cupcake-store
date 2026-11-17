@@ -1,0 +1,13 @@
+Evidência E02 — Defeito D05: edição do cupcake sobrescreve o estoque (lost update)
+Data: 2026-11-17 · Teste: AdminEstoqueIT.edicaoNaoDesfazVendaConcorrente (H2/Flyway, contexto Spring completo)
+
+Cenário: cupcake com estoque 10; admin abre o formulário de edição; cliente compra 3 (estoque real 7);
+admin salva apenas a mudança de preço, mas o PUT envia "estoque": 10 que estava no formulário.
+
+Saída ANTES da correção:
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0 <<< FAILURE! -- in D05 — edição do cupcake não sobrescreve o estoque (lost update)
+[as 3 unidades vendidas não podem voltar ao estoque]
+expected: 7
+ but was: 10
+
+Impacto: 3 unidades que já foram vendidas "reaparecem" na vitrine -> venda acima do estoque físico.

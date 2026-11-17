@@ -69,6 +69,7 @@ class CupcakeServiceTest {
         assertThat(resp.sabor()).isEqualTo("Limão Siciliano");
         assertThat(resp.preco()).isEqualByComparingTo("11.50");
         assertThat(resp.ativo()).isFalse();
+        assertThat(resp.estoque()).as("edição não mexe no estoque (D05)").isEqualTo(1);
     }
 
     @Test

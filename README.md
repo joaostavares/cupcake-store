@@ -73,7 +73,7 @@ Variáveis aceitas: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `
 PG_TEST_URL=jdbc:postgresql://localhost:5432/cupcakes_test ./mvnw test
 
 # E2E no navegador + capturas de tela (app rodando em :8080 com banco novo)
-npm i playwright@1.49.1 && npx playwright install chromium
+npm i playwright@1.65.1 && npx playwright install chromium-headless-shell
 node scripts/e2e-capturas.mjs
 ```
 

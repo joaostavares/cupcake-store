@@ -28,7 +28,8 @@
         <div class="campo"><label for="f-sabor">Sabor</label><input id="f-sabor" name="sabor" maxlength="80" required></div>
         <div class="campo"><label for="f-descricao">Descrição</label><textarea id="f-descricao" name="descricao" rows="3" maxlength="500"></textarea></div>
         <div class="campo"><label for="f-preco">Preço (R$)</label><input id="f-preco" name="preco" type="number" min="0.01" step="0.01" required></div>
-        <div class="campo"><label for="f-estoque">Estoque</label><input id="f-estoque" name="estoque" type="number" min="0" step="1" required></div>
+        <div class="campo"><label for="f-estoque">Estoque</label><input id="f-estoque" name="estoque" type="number" min="0" step="1" required>
+          <span class="dica" id="dica-estoque" hidden>Para repor o estoque, use o campo "Estoque" na tabela.</span></div>
         <div class="campo"><label for="f-imagem">URL da imagem (opcional)</label><input id="f-imagem" name="imagemUrl" maxlength="255" placeholder="/img/cupcake-padrao.svg"></div>
         <label class="campo-inline"><input type="checkbox" name="ativo" checked> Ativo (aparece na vitrine)</label>
         <div class="acoes">

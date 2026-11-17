@@ -23,7 +23,7 @@ public record CupcakeRequest(
         @Digits(integer = 8, fraction = 2, message = "Preço inválido (máximo 2 casas decimais).")
         BigDecimal preco,
 
-        @NotNull(message = "Informe o estoque.")
+        /** Usado só no cadastro. Na edição é ignorado: estoque muda apenas por PATCH /estoque (defeito D05). */
         @Min(value = 0, message = "O estoque não pode ser negativo.")
         @Max(value = 100000, message = "Estoque máximo é 100000.")
         Integer estoque,

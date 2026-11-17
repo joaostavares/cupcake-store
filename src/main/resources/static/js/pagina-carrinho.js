@@ -28,7 +28,7 @@ function linha(i, estoque) {
 }
 
 async function renderizar() {
-  const itens = carrinho.itens();
+  let itens = carrinho.itens();
   alerta(mensagem, '');
   if (!itens.length) {
     itensEl.innerHTML = '<p class="vazio">Seu carrinho está vazio. <a href="index.html">Ver cupcakes</a></p>';
@@ -41,6 +41,10 @@ async function renderizar() {
     cotacao = await api.post('/api/pedidos/cotacao', { itens: carrinho.paraApi() });
   } catch (e) {
     alerta(mensagem, e.message + (e.status === 404 || e.status === 409 ? ' Remova o item do carrinho para continuar.' : ''));
+  }
+
+  if (cotacao && carrinho.sincronizar(cotacao.itens)) {
+    itens = carrinho.itens();
   }
 
   const estoques = {};

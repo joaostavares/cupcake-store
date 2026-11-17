@@ -69,6 +69,21 @@ export const carrinho = {
     gravar([]);
   },
 
+  /** Atualiza preço, sabor e estoque guardados com os valores atuais do servidor (defeito D04). */
+  sincronizar(itensCotacao) {
+    const itens = ler();
+    let mudou = false;
+    itensCotacao.forEach((c) => {
+      const item = itens.find((i) => i.cupcakeId === c.cupcakeId);
+      if (item && (item.preco !== c.precoUnitario || item.sabor !== c.sabor || item.estoque !== c.estoqueDisponivel)) {
+        Object.assign(item, { preco: c.precoUnitario, sabor: c.sabor, estoque: c.estoqueDisponivel });
+        mudou = true;
+      }
+    });
+    if (mudou) gravar(itens);
+    return mudou;
+  },
+
   /** Formato esperado pela API. */
   paraApi() {
     return ler().map((i) => ({ cupcakeId: i.cupcakeId, quantidade: i.quantidade }));

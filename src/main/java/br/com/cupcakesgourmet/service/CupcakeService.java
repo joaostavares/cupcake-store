@@ -44,9 +44,14 @@ public class CupcakeService {
         }
         Cupcake cupcake = new Cupcake();
         preencher(cupcake, req, sabor);
+        cupcake.setEstoque(req.estoque() == null ? 0 : req.estoque());
         return CupcakeResponse.de(repository.save(cupcake));
     }
 
+    /**
+     * Edita os dados cadastrais. O estoque NÃO é alterado aqui: o valor que vem do formulário pode estar
+     * desatualizado e desfaria vendas feitas enquanto o admin editava (defeito D05 — lost update).
+     */
     @Transactional
     public CupcakeResponse atualizar(Long id, CupcakeRequest req) {
         Cupcake cupcake = buscar(id);
@@ -74,7 +79,6 @@ public class CupcakeService {
         cupcake.setSabor(sabor);
         cupcake.setDescricao(vazioParaNulo(req.descricao()));
         cupcake.setPreco(req.preco());
-        cupcake.setEstoque(req.estoque());
         cupcake.setImagemUrl(vazioParaNulo(req.imagemUrl()));
         cupcake.setAtivo(req.ativo() == null || req.ativo());
     }

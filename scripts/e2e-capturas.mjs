@@ -2,7 +2,7 @@
 // em docs/situacao-3/evidencias/. Também falha se houver erro de JavaScript no console.
 //
 // Uso (com a aplicação rodando em http://localhost:8080 e banco recém-criado):
-//   npm i playwright@1.49.1 && npx playwright install chromium
+//   npm i playwright@1.65.1 && npx playwright install chromium-headless-shell
 //   node scripts/e2e-capturas.mjs [baseUrl]
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
@@ -10,7 +10,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const BASE = process.argv[2] || 'http://localhost:8080';
-const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'docs', 'situacao-3', 'evidencias');
+const OUT = process.env.EVIDENCIAS_DIR || join(dirname(fileURLToPath(import.meta.url)), '..', 'docs', 'situacao-3', 'evidencias');
 mkdirSync(OUT, { recursive: true });
 
 const errosConsole = [];
@@ -96,7 +96,11 @@ await print(page, 'T05-checkout');
 await page.click('#btn-pagar');
 await page.waitForURL(/pedido\.html\?id=\d+/);
 await page.waitForSelector('#pix-codigo');
-const qrOk = await page.locator('.pix img').evaluate((img) => img.complete && img.naturalWidth > 0);
+// Aguarda o PNG do QR Code carregar (a 1ª versão do roteiro checava antes do carregamento — ver laudo, D01).
+const qrOk = await page.waitForFunction(() => {
+  const img = document.querySelector('.pix img');
+  return img && img.complete && img.naturalWidth > 0;
+}, null, { timeout: 5000 }).then(() => true, () => false);
 verificar('CT08', 'Pedido criado (AGUARDANDO_PAGAMENTO) com QR Code e PIX copia e cola',
   qrOk && (await page.inputValue('#pix-codigo')).startsWith('000201'));
 verificar('CT09', 'Carrinho esvaziado após o pedido', (await page.textContent('#contador-carrinho')) === '0');
@@ -192,6 +196,21 @@ await pn.click('#form-cadastro button[type=submit]');
 await pn.waitForFunction(() => document.getElementById('mensagem').textContent.includes('já está cadastrado'));
 verificar('CT18', 'Cadastro com e-mail existente exibe MSG02', true);
 await print(pn, 'T12-msg02-cadastro-duplicado');
+
+// CT21 — Admin altera o preço com o item já no carrinho do cliente (defeito D04)
+await page.goto(`${BASE}/index.html`);
+await page.waitForSelector('.card');
+await card('Red Velvet').locator('[data-acao=adicionar]').click();
+await pa.click('#aba-catalogo');
+await pa.locator('#tabela-cupcakes tr', { hasText: 'Red Velvet' }).locator('[data-acao=editar]').click();
+await pa.fill('#f-preco', '13.90');
+await pa.click('#form-cupcake button[type=submit]');
+await pa.waitForSelector('#tabela-cupcakes tr:has-text("13,90")');
+await page.goto(`${BASE}/carrinho.html`);
+await page.waitForFunction(() => document.getElementById('total').textContent.includes('R$'));
+const linhaRed = (await page.locator('#itens tr', { hasText: 'Red Velvet' }).textContent()).replace(/\s+/g, ' ');
+verificar('CT21', 'Carrinho mostra o preço atual após o admin alterar o preço (D04)', linhaRed.includes('13,90'));
+await print(page, 'T14-carrinho-preco-atualizado');
 
 // CT19 — Responsivo (celular)
 const mobile = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, locale: 'pt-BR' });
