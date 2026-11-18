@@ -7,8 +7,8 @@ Autor: **João Serafini Tavares**.
 | | |
 |---|---|
 | **Aplicação hospedada** | **https://cupcakes-gourmet-2sgd.onrender.com/** (plano gratuito: o 1º acesso após inatividade leva ~1 min) |
-| **Vídeo narrado (≥ 5 min)** | _a preencher_ |
-| **Vídeo das correções (≤ 5 min)** | _a preencher_ |
+| **Vídeo narrado (≥ 5 min)** | https://youtu.be/H_hKnF4k_ng |
+| **Vídeo das correções (≤ 5 min)** | https://youtu.be/Fxzzp_TTxNQ |
 
 ## Tabela de codificação
 
